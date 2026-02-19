@@ -1,57 +1,77 @@
+from fastapi import FastAPI, Form
+from fastapi.responses import HTMLResponse
 import random
 
-# 1. Configuração oficial My Acessórios
-equipe = ["Viviane", "Rayla", "Jane", "Kawany", "Núbia"]
-pecas = ["Mix Verão", "Prata", "Dourado", "Longo Dourado", "Mix de Banho"]
+app = FastAPI()
 
-def realizar_sorteio():
-    print("✨ CONFIGURAÇÃO DO SORTEIO - MY ACESSÓRIOS ✨")
-    print("Informe o que cada uma usou na semana passada:")
-    print(f"Opções: {', '.join(pecas)}\n")
+equipe = ["Viviane", "Rayla", "Jane", "Kawany", "Núbia", "Joyce"]
+pecas = ["Mix Verão", "Prata", "Dourado", "Longo Dourado", "Mix de Banho", "Bijour"]
 
-    historico_manual = {}
+# CSS Estilizado para o Sorteio
+ESTILO_SORTEIO = """
+<style>
+    :root { --ouro: #D4AF37; --rosa: #ff69b4; --vinho: #800000; }
+    body { font-family: 'Segoe UI', sans-serif; background: #fff5f8; text-align: center; }
+    .card-sorteio { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: inline-block; margin-top: 20px; }
+    .resultado-item { border-bottom: 1px solid #eee; padding: 10px; display: flex; justify-content: space-between; width: 300px; }
+    .vendedora { font-weight: bold; color: var(--vinho); }
+    .peca { color: var(--ouro); font-weight: bold; }
+    select { padding: 8px; border-radius: 5px; border: 1px solid var(--rosa); margin: 5px; }
+    button { background: var(--vinho); color: white; padding: 10px 20px; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; }
+</style>
+"""
+
+@app.get("/", response_class=HTMLResponse)
+async def pagina_sorteio():
+    # Cria os menus de seleção para cada vendedora
+    inputs = ""
     for nome in equipe:
-        while True:
-            # Pega o que você digitou e compara sem ligar para maiúsculas/minúsculas
-            entrada = input(f"O que a {nome} usou semana passada? ").strip()
+        opcoes = "".join([f"<option value='{p}'>{p}</option>" for p in pecas])
+        inputs += f"<div><label>{nome}:</label> <select name='{nome}'>{opcoes}</select></div>"
+    
+    return f"""
+    <html>
+        <head><title>Sorteio My Acessórios</title>{ESTILO_SORTEIO}</head>
+        <body>
+            <h1 style='color: var(--vinho)'>✨ Sorteio de Composições ✨</h1>
+            <p>Selecione o que cada uma usou na <b>semana passada</b>:</p>
+            <form action="/sortear" method="post">
+                <div class="card-sorteio">{inputs}<br><button type="submit">GERAR SORTEIO DA SEMANA</button></div>
+            </form>
+        </body>
+    </html>
+    """
 
-            # Procura a peça na lista ignorando se é maiúscula ou minúscula
-            peca_encontrada = next((p for p in pecas if p.lower() == entrada.lower()), None)
-
-            if peca_encontrada:
-                historico_manual[nome] = peca_encontrada
-                break
-            else:
-                print(f"⚠️ Erro! Digite exatamente como na lista: {pecas}")
-
-    # 2. Lógica de Sorteio com Restrição Única
+@app.post("/sortear", response_class=HTMLResponse)
+async def sortear(
+    # Aqui o FastAPI recebe as escolhas da semana passada
+    Viviane: str = Form(...), Rayla: str = Form(...), Jane: str = Form(...), 
+    Kawany: str = Form(...), Núbia: str = Form(...), Joyce: str = Form(...)
+):
+    historico = {"Viviane": Viviane, "Rayla": Rayla, "Jane": Jane, "Kawany": Kawany, "Núbia": Núbia, "Joyce": Joyce}
+    
+    # Lógica do Sorteio (mesma que você já fez)
     while True:
         try:
-            sorteio_atual = {}
-            disponiveis_agora = pecas.copy()
-            random.shuffle(disponiveis_agora)
-
+            sorteio_final = {}
+            disponiveis = pecas.copy()
+            random.shuffle(disponiveis)
             for nome in equipe:
-                ultima_peca = historico_manual.get(nome)
-                opcoes_validas = [p for p in disponiveis_agora if p != ultima_peca]
-
+                opcoes_validas = [p for p in disponiveis if p != historico[nome]]
                 escolha = random.choice(opcoes_validas)
-                sorteio_atual[nome] = escolha
-                disponiveis_agora.remove(escolha)
+                sorteio_final[nome] = escolha
+                disponiveis.remove(escolha)
+            break
+        except: continue
 
-            return sorteio_atual
-        except IndexError:
-            continue
-
-# 3. Execução e Apresentação
-resultado = realizar_sorteio()
-
-print("\n" + "═"*45)
-print(" 🎲  RESULTADO DO SORTEIO - COMPOSIÇÕES  🎲")
-print("═"*45)
-for nome, peca in resultado.items():
-    print(f" 💎  {nome.ljust(8)}  ➔   {peca.ljust(15)}")
-
-print("═"*45)
-print(" ✨ Boas vendas Viviane, Rayla, Jane, Kawany e Núbia! ✨")
-print("═"*45)
+    res_html = "".join([f"<div class='resultado-item'><span class='vendedora'>{n}</span> <span class='peca'>💎 {p}</span></div>" for n, p in sorteio_final.items()])
+    
+    return f"""
+    <html>
+        <head>{ESTILO_SORTEIO}</head>
+        <body>
+            <h1 style='color: var(--vinho)'>🎲 Resultado da Semana 🎲</h1>
+            <div class="card-sorteio">{res_html}<br><a href="/">Refazer Sorteio</a></div>
+        </body>
+    </html>
+    """
