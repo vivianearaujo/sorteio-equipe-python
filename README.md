@@ -1,30 +1,34 @@
-# 🎲 Algoritmo de Sorteio com Restrição de Histórico
-
-Este projeto foi desenvolvido para automatizar a distribuição de itens ou tarefas entre uma equipe, garantindo que o resultado atual nunca se repita em relação à rodada anterior. 
+🎲 Sorteador My Acessórios — Gestão de Composições
+Este projeto foi desenvolvido por mim (Viviane Santos) para automatizar a distribuição de itens entre uma equipe, garantindo que o resultado atual nunca se repita em relação à rodada anterior.
 
 Originalmente criado para organizar o rodízio de composições de looks em uma loja, o sistema resolve o problema de repetição manual, trazendo imparcialidade e agilidade para o processo.
 
----
+🚀 Funcionalidades
+Lógica de Não-Repetição: O algoritmo verifica o que cada vendedora utilizou na semana anterior e exclui essa opção do sorteio atual.
 
-## 🚀 Funcionalidades
+Gestão Dinâmica de Equipe: Agora é possível adicionar ou excluir vendedoras diretamente pela interface, sem precisar mexer no código.
 
-* **Lógica de Não-Repetição:** O algoritmo verifica o que cada usuário utilizou na rodada anterior e exclui essa opção do sorteio atual.
-* **Interface Web Modern:** Interface limpa e responsiva construída com FastAPI e CSS, focada na usabilidade.
-* **Prevenção de Conflitos:** Sistema inteligente que reinicia o sorteio automaticamente caso as restrições gerem um impasse lógico.
+Interface Web Moderna: Interface limpa, responsiva e estilizada com foco na usabilidade comercial.
 
----
+Prevenção de Conflitos: Sistema inteligente que reinicia o sorteio automaticamente caso as restrições gerem um impasse lógico.
 
-## 🛠️ Tecnologias Utilizadas
+🛠️ Tecnologias Utilizadas
+Python 3.x: Linguagem base para a lógica.
 
-* **Python 3.x**: Linguagem base para a lógica.
-* **FastAPI**: Framework moderno para a criação da interface web e API.
-* **Uvicorn**: Servidor ASGI para rodar a aplicação.
-* **Jinja2/HTML5/CSS3**: Para o front-end estilizado.
+FastAPI: Framework moderno e rápido para a criação da interface web.
 
----
+Uvicorn: Servidor ASGI para rodar a aplicação.
 
-## 💻 Como Instalar e Rodar
+HTML5/CSS3: Para o front-end personalizado com a identidade da marca.
 
-1. **Clone o repositório:**
-   ```bash
-   git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
+PyInstaller: Utilizado para transformar o projeto em um executável (.exe) para Windows.
+
+💻 Como Instalar e Rodar
+Clone o repositório:
+git clone https://github.com/SEU-USUARIO/sorteador-my-acessorios.git
+
+Instale as dependências:
+pip install fastapi uvicorn python-multipart
+
+Inicie o servidor:
+python run_sorteio.py
