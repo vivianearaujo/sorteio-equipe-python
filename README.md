@@ -1,10 +1,9 @@
 ## 📸 Demonstração do Sistema
 
 <p align="center">
-  <img src="sorteio.png" width="45%" alt="Tela de Sorteio" />
-  <img src="resultado.png" width="45%" alt="Tela de Resultado" />
+  <img src="miniatura.PNG" width="45%" alt="Tela de Sorteio" />
+  <img src="resultado.PNG" width="45%" alt="Tela de Resultado" />
 </p>
-
 🎲 Sorteador My Acessórios — Gestão de Composições
 Este projeto foi desenvolvido por mim (Viviane Santos) para automatizar a distribuição de itens entre uma equipe, garantindo que o resultado atual nunca se repita em relação à rodada anterior.
 
